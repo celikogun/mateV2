@@ -13,6 +13,24 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
+<style>
+/* moving ring pattern (home hero) - kept here so it works with the existing styles.css */
+.hero .pattern{position:absolute;pointer-events:none;z-index:0;overflow:visible}
+.hero .pattern svg{width:100%;height:100%;overflow:visible;display:block}
+.hero .pattern.tr{width:min(64vw,880px);height:min(64vw,880px);right:max(-26vw,-360px);top:max(-30vw,-400px)}
+.hero .pattern.bl{width:min(34vw,460px);height:min(34vw,460px);left:max(-17vw,-230px);bottom:max(-17vw,-230px)}
+.hero .hero-grid,.hero .cue{z-index:1}
+.hero .spin{transform-origin:50% 50%;transform-box:fill-box;animation:mate-spin 70s linear infinite}
+.hero .spin.rev{animation-duration:110s;animation-direction:reverse}
+.hero .spin.slow{animation-duration:160s}
+.hero .breathe{transform-origin:50% 50%;transform-box:fill-box;animation:mate-breathe 7s ease-in-out infinite}
+.hero .dots{animation:mate-float 9s ease-in-out infinite}
+@keyframes mate-spin{to{transform:rotate(360deg)}}
+@keyframes mate-breathe{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.03);opacity:1}}
+@keyframes mate-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media (max-width:640px){.hero .pattern.tr{width:130vw;height:130vw;right:-62vw;top:-58vw;opacity:.8}.hero .pattern.bl{width:70vw;height:70vw;left:-38vw;bottom:-30vw}}
+@media (prefers-reduced-motion:reduce){.hero .spin,.hero .breathe,.hero .dots{animation:none}}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -63,7 +81,7 @@
   <section class="hero">
     <!-- Moving ring pattern (top right) -->
     <div class="pattern tr" aria-hidden="true" data-parallax="0.12">
-      <svg viewBox="0 0 400 400" fill="none">
+      <svg viewBox="0 0 400 400" width="400" height="400" fill="none">
         <circle class="breathe" cx="200" cy="200" r="150" stroke="#E1E5D9" stroke-width="56"/>
         <g class="spin slow"><circle cx="200" cy="200" r="196" stroke="#5E8665" stroke-opacity=".22" stroke-dasharray="2 9"/></g>
         <g class="spin rev"><circle cx="200" cy="200" r="104" stroke="#5E8665" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="110 36 6 36"/><circle cx="304" cy="200" r="4" fill="#5E8665" fill-opacity=".6"/></g>
@@ -72,7 +90,7 @@
     </div>
     <!-- Moving ring pattern (bottom left) -->
     <div class="pattern bl" aria-hidden="true" data-parallax="-0.06">
-      <svg viewBox="0 0 400 400" fill="none">
+      <svg viewBox="0 0 400 400" width="400" height="400" fill="none">
         <circle class="breathe" cx="200" cy="200" r="150" stroke="#E1E5D9" stroke-width="56"/>
         <g class="spin rev"><circle cx="200" cy="200" r="196" stroke="#5E8665" stroke-opacity=".25" stroke-dasharray="2 9"/></g>
         <g class="spin slow"><circle cx="200" cy="200" r="104" stroke="#5E8665" stroke-opacity=".3" stroke-dasharray="90 30 4 30"/></g>

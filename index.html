@@ -61,8 +61,23 @@
 
 <main>
   <section class="hero">
-    <span class="ring r1" aria-hidden="true"></span>
-    <span class="ring r2" aria-hidden="true"></span>
+    <!-- Moving ring pattern (top right) -->
+    <div class="pattern tr" aria-hidden="true" data-parallax="0.12">
+      <svg viewBox="0 0 400 400" fill="none">
+        <circle class="breathe" cx="200" cy="200" r="150" stroke="#E1E5D9" stroke-width="56"/>
+        <g class="spin slow"><circle cx="200" cy="200" r="196" stroke="#5E8665" stroke-opacity=".22" stroke-dasharray="2 9"/></g>
+        <g class="spin rev"><circle cx="200" cy="200" r="104" stroke="#5E8665" stroke-opacity=".35" stroke-width="1.2" stroke-dasharray="110 36 6 36"/><circle cx="304" cy="200" r="4" fill="#5E8665" fill-opacity=".6"/></g>
+        <g class="spin"><circle cx="200" cy="200" r="182" stroke="#132650" stroke-opacity=".14" stroke-dasharray="1 7"/><circle cx="200" cy="18" r="3.5" fill="#132650" fill-opacity=".35"/></g>
+      </svg>
+    </div>
+    <!-- Moving ring pattern (bottom left) -->
+    <div class="pattern bl" aria-hidden="true" data-parallax="-0.06">
+      <svg viewBox="0 0 400 400" fill="none">
+        <circle class="breathe" cx="200" cy="200" r="150" stroke="#E1E5D9" stroke-width="56"/>
+        <g class="spin rev"><circle cx="200" cy="200" r="196" stroke="#5E8665" stroke-opacity=".25" stroke-dasharray="2 9"/></g>
+        <g class="spin slow"><circle cx="200" cy="200" r="104" stroke="#5E8665" stroke-opacity=".3" stroke-dasharray="90 30 4 30"/></g>
+      </svg>
+    </div>
     <span class="dots" aria-hidden="true"></span>
     <div class="wrap hero-grid">
       <div>
@@ -295,6 +310,14 @@
   if(logo) logo.addEventListener('click',function(){
     logo.querySelectorAll('.ink,.tick,.pop').forEach(function(el){el.style.animation='none';void el.getBoundingClientRect();el.style.animation='';});
   });
+  /* gentle parallax on the hero ring pattern */
+  var layers=document.querySelectorAll('[data-parallax]');
+  if(layers.length&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    window.addEventListener('scroll',function(){
+      var y=window.scrollY;
+      layers.forEach(function(el){el.style.transform='translateY('+(y*parseFloat(el.dataset.parallax))+'px)';});
+    },{passive:true});
+  }
   document.querySelectorAll('.copy').forEach(function(b){
     b.addEventListener('click',function(){
       var el=document.getElementById(b.dataset.copy),t=el.textContent;

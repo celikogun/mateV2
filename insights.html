@@ -13,6 +13,44 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
+<style>
+/* ===== Latest on Instagram (auto-updating) ===== */
+.ig-latest{margin-top:clamp(48px,6vw,72px);padding-top:clamp(36px,5vw,52px);border-top:1px solid var(--line)}
+.ig-top{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:26px}
+.ig-top h3{font-size:clamp(1.5rem,2.6vw,2rem)}
+.ig-handle{display:inline-flex;align-items:center;gap:10px;font-size:.95rem;color:var(--muted);text-decoration:none}
+.ig-handle svg{width:20px;height:20px;color:var(--sage)}
+.ig-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.ig-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;text-decoration:none;color:inherit;min-width:0;transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease}
+.ig-media{position:relative;aspect-ratio:4/5;background:var(--sage-soft);overflow:hidden}
+.ig-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.ig-type{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;background:rgba(246,244,239,.92);display:grid;place-items:center;color:var(--navy)}
+.ig-type svg{width:15px;height:15px}
+.ig-body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
+.ig-go{margin-top:auto}
+.ig-date{font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;color:var(--sage);font-weight:500}
+.ig-cap{color:var(--muted);font-size:.95rem;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.ig-go{color:var(--sage-deep);font-weight:500;font-size:.92rem}
+.ig-go::after{content:" →";display:inline-block;transition:transform .3s ease}
+/* loading placeholders */
+.ig-card.is-loading .ig-media{background:linear-gradient(100deg,var(--sage-soft) 30%,#EEF1EA 50%,var(--sage-soft) 70%);background-size:300% 100%;animation:ig-shine 1.6s ease-in-out infinite}
+.ig-card.is-loading .ig-line{height:10px;border-radius:5px;background:var(--sage-soft)}
+@keyframes ig-shine{to{background-position:-100% 0}}
+/* preview-only placeholder art */
+.ig-ph{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;font-family:var(--serif);color:var(--navy);font-size:1.05rem;line-height:1.35}
+.ig-ph::before{content:"";position:absolute;width:150%;aspect-ratio:1;border-radius:50%;border:42px solid rgba(255,255,255,.55);right:-80%;top:-70%}
+.ig-ph span{position:relative;max-width:16ch}
+.ig-ph small{display:block;font-family:var(--sans);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sage);margin-bottom:10px}
+.ig-note{margin-top:16px;font-size:.85rem;color:var(--muted);font-style:italic}
+@media (hover:hover) and (pointer:fine){
+  .ig-card:hover{transform:translateY(-4px);box-shadow:0 22px 40px -28px rgba(19,35,74,.45);border-color:var(--sage)}
+  .ig-card:hover .ig-media img{transform:scale(1.04)}
+  .ig-card:hover .ig-go::after{transform:translateX(4px)}
+}
+@media (max-width:900px){.ig-grid{grid-template-columns:1fr 1fr}.ig-grid>*:nth-child(3){display:none}}
+@media (max-width:560px){.ig-grid{grid-template-columns:1fr}.ig-grid>*:nth-child(3){display:flex}}
+@media (prefers-reduced-motion:reduce){.ig-card.is-loading .ig-media{animation:none}}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -114,6 +152,16 @@
           <span class="dots" aria-hidden="true"></span>
         </article>
       </div>
+      <div class="ig-latest" id="ig-latest">
+        <div class="ig-top">
+          <div>
+            <p class="eyebrow">Latest on Instagram</p>
+            <h3 style="margin-top:14px">Recent posts from <span class="green">@mate_education</span></h3>
+          </div>
+          <a class="ig-handle" href="https://www.instagram.com/mate_education/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>@mate_education</a>
+        </div>
+        <div class="ig-grid" id="ig-grid" aria-live="polite"></div>
+      </div>
       <p style="margin-top:28px"><a class="link-arrow" href="https://www.instagram.com/mate_education/" target="_blank" rel="noopener">Follow @mate_education for new posts</a></p>
     </div>
   </section>
@@ -157,6 +205,66 @@
   <div class="wrap foot-bottom"><span>© 2026 MATE Education</span><span>www.mateducation.com</span></div>
 </footer>
 
+<script>
+/* ===== Latest on Instagram =====
+   Paste your Behold JSON feed URL between the quotes below.
+   Leave it empty to see the preview placeholders. */
+(function(){
+  var FEED_URL = "https://feeds.behold.so/NBRzieQD9LDdrh6tdDEe";
+  var COUNT = 3;
+  var grid = document.getElementById('ig-grid');
+  if(!grid) return;
+
+  var typeIcon = {
+    VIDEO:'<svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.5v9l7-4.5z"/></svg>',
+    CAROUSEL_ALBUM:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4.5" width="9" height="9" rx="1.5"/><path d="M5 2.5h7a1.5 1.5 0 0 1 1.5 1.5v7"/></svg>'
+  };
+  function esc(t){var d=document.createElement('div');d.textContent=t||'';return d.innerHTML;}
+  function fmt(ts){try{var d=new Date(String(ts).replace(/([+-]\d\d)(\d\d)$/,'$1:$2'));return isNaN(d)?'':d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});}catch(e){return '';}}
+
+  /* loading state */
+  var sk='';
+  for(var i=0;i<COUNT;i++){sk+='<div class="ig-card is-loading" aria-hidden="true"><div class="ig-media"></div><div class="ig-body"><div class="ig-line" style="width:40%"></div><div class="ig-line"></div><div class="ig-line" style="width:75%"></div></div></div>';}
+  grid.innerHTML=sk;
+
+  function render(posts){
+    grid.innerHTML = posts.slice(0,COUNT).map(function(p){
+      var img = (p.sizes && p.sizes.medium && p.sizes.medium.mediaUrl) || (p.mediaType==='VIDEO' ? p.thumbnailUrl : p.mediaUrl) || p.thumbnailUrl;
+      var cap = (p.prunedCaption || p.caption || '').replace(/(^|\s)#[\w\u00C0-\u024F\u0130\u0131\u015E\u015F\u011E\u011F]+/g,' ').replace(/\s+/g,' ').trim();
+      var first = cap.split('\n')[0];
+      return '<a class="ig-card" href="'+esc(p.permalink)+'" target="_blank" rel="noopener">'+
+        '<div class="ig-media"><img src="'+esc(img)+'" alt="'+esc(first||'Instagram post from @mate_education')+'" loading="lazy">'+
+        (typeIcon[p.mediaType]?'<span class="ig-type" aria-hidden="true">'+typeIcon[p.mediaType]+'</span>':'')+'</div>'+
+        '<div class="ig-body"><span class="ig-date">'+esc(fmt(p.timestamp))+'</span>'+
+        (cap?'<p class="ig-cap">'+esc(cap)+'</p>':'')+'<span class="ig-go">View on Instagram</span></div></a>';
+    }).join('');
+  }
+
+  function preview(){
+    var labels=['Your newest post','Your second-newest post','Your third-newest post'];
+    grid.innerHTML = labels.map(function(l){
+      return '<a class="ig-card" href="https://www.instagram.com/mate_education/" target="_blank" rel="noopener">'+
+        '<div class="ig-media"><div class="ig-ph"><span><small>Placeholder</small>'+l+' will appear here</span></div></div>'+
+        '<div class="ig-body"><span class="ig-date">Date of the post</span>'+
+        '<p class="ig-cap">The first lines of the post caption show here, cut off neatly after three lines so all three cards stay the same height.</p>'+
+        '<span class="ig-go">View on Instagram</span></div></a>';
+    }).join('');
+    var n=document.createElement('p');n.className='ig-note';
+    n.textContent='Preview: these placeholders are replaced by your real posts once the feed link is added.';
+    grid.parentNode.appendChild(n);
+  }
+
+  if(!FEED_URL){ setTimeout(preview,900); return; }
+  fetch(FEED_URL).then(function(r){return r.json();}).then(function(d){
+    var posts = Array.isArray(d) ? d : (d.posts||[]);
+    if(!posts.length) throw new Error('empty');
+    render(posts);
+  }).catch(function(){
+    /* if Instagram can't be reached, hide the section quietly */
+    document.getElementById('ig-latest').style.display='none';
+  });
+})();
+</script>
 <script>
 (function(){
   var header=document.querySelector('.site-header');

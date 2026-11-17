@@ -13,6 +13,72 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
+<style>
+/* ---- Founder links + CV panel (about page only) ---- */
+.cv-links .spine{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;box-sizing:border-box;min-height:44px;font-family:var(--serif);font-size:.92rem;line-height:1.3;padding:10px 16px;border:0;border-radius:4px;letter-spacing:.02em;text-align:left;text-decoration:none;cursor:pointer;transition:transform .3s ease,box-shadow .3s ease}
+.cv-links .spine svg{width:16px;height:16px;flex:none;opacity:.75;transition:transform .3s ease,opacity .3s ease}
+.cv-links .spine:focus-visible{outline:2px solid var(--sage);outline-offset:3px}
+.cv-links .spine:nth-child(1){background:var(--navy);color:var(--bg)}
+.cv-links .spine:nth-child(2){background:var(--sage-deep);color:#F1EEE6}
+.cv-links .spine:nth-child(3){background:var(--sand);color:var(--fg)}
+.cv-links .spine.is-on{transform:translateX(6px);box-shadow:0 10px 22px -14px rgba(19,38,80,.6)}
+@media (hover:hover){.cv-links .spine:hover{transform:translateX(6px);box-shadow:0 10px 22px -14px rgba(19,38,80,.6)}.cv-links .spine:hover svg{opacity:1;transform:translateX(2px)}}
+.cv-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+.cv-actions .btn svg{width:18px;height:18px}
+.cvb{position:fixed;inset:0;z-index:58;background:rgba(19,38,80,.38);opacity:0;transition:opacity .4s ease}
+.cvb.is-full{opacity:1}
+.cvp{--w:min(440px,calc(100vw - 32px));position:fixed;z-index:60;top:calc(var(--header-h) + 16px);bottom:16px;right:16px;width:var(--w);background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 30px 70px -30px rgba(19,35,74,.5);display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;transform:translateX(calc(100% + 40px));opacity:0;visibility:hidden;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .35s ease,width .5s cubic-bezier(.2,.8,.2,1),right .5s cubic-bezier(.2,.8,.2,1),top .5s cubic-bezier(.2,.8,.2,1),bottom .5s cubic-bezier(.2,.8,.2,1),visibility 0s linear .5s}
+.cvp.is-peek,.cvp.is-full{transform:none;opacity:1;visibility:visible;transition-delay:0s}
+.cvp.is-full{--w:min(980px,calc(100vw - 48px));right:calc((100vw - var(--w)) / 2);top:24px;bottom:24px}
+.cvh{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:22px 24px 18px;border-bottom:1px solid var(--line);background:var(--bg)}
+.cvh h2{font-size:1.5rem;margin-top:8px}
+.cvh .cvsub{margin:6px 0 0;font-size:.85rem;color:var(--muted);line-height:1.45}
+.cvp.is-full .cvh{padding:28px 48px 22px}
+.cvp.is-full .cvh h2{font-size:2.2rem}
+.cvtools{display:flex;gap:8px;flex:none}
+.ibtn{width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--fg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;padding:0;transition:background-color .2s ease,color .2s ease}
+.ibtn:hover{background:var(--navy);color:var(--bg)}
+.ibtn svg{width:18px;height:18px}
+.ibtn .i-shrink,.cvp.is-full .ibtn .i-grow{display:none}
+.cvp.is-full .ibtn .i-shrink{display:block}
+.cvbody{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:22px 24px 40px;font-size:.9rem;line-height:1.55;color:var(--fg)}
+.cvp.is-full .cvbody{padding:32px 48px 64px;font-size:1rem}
+.cvbody h3{font-size:1.1rem;margin:34px 0 14px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.cvp.is-full .cvbody h3{font-size:1.35rem;margin-top:44px}
+.cvbody h3:first-child,.cvp.is-full .cvbody h3:first-child{margin-top:0}
+.cvbody p{margin:0}
+.cvbody ul{margin:8px 0 0;padding-left:18px}
+.cvbody .muted{color:var(--muted)}
+.cvbody .sm{font-size:.8em}
+.cvbody .t{font-weight:600}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:18px}
+.cvp.is-full .stats{grid-template-columns:repeat(6,minmax(0,1fr))}
+.stat{background:var(--sage-soft);border-radius:12px;padding:12px 14px}
+.stat b{display:block;font-family:var(--serif);font-size:1.5rem;line-height:1;color:var(--navy)}
+.stat span{display:block;margin-top:6px;font-size:.75rem;line-height:1.35;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:var(--sand);border-radius:999px;padding:5px 12px;font-size:.8rem}
+.tl{display:grid;gap:14px}
+.tli{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px}
+.cvp.is-full .tli{grid-template-columns:140px minmax(0,1fr)}
+.tli .d{font-size:.78rem;color:var(--sage-deep);font-weight:500;padding-top:2px}
+.tli .o{color:var(--muted);font-size:.85em}
+.tli .n{font-size:.85em;margin-top:2px}
+.now{display:inline-block;margin-left:8px;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;background:var(--sage);color:#fff;padding:2px 7px;border-radius:999px;vertical-align:2px;font-weight:500}
+.plist{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+.plist li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px}
+.plist .num{font-family:var(--serif);color:var(--sage);font-weight:700}
+.card{background:var(--bg);border-radius:12px;padding:14px 16px}
+.card+.card{margin-top:10px}
+.two{display:grid;gap:16px;margin-top:16px}
+.cvp.is-full .two{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+.inst{display:grid;gap:4px 20px;font-size:.85em;margin-top:8px}
+.cvp.is-full .inst{grid-template-columns:repeat(2,minmax(0,1fr))}
+.cvfoot{margin-top:36px !important;padding-top:16px;border-top:1px solid var(--line);font-size:.82em;color:var(--muted)}
+html.cv-lock{overflow:hidden}
+@media (max-width:600px){.cvp.is-full{top:12px;bottom:12px;--w:calc(100vw - 24px)}.cvp.is-full .cvh,.cvp.is-full .cvbody{padding-inline:20px}.cvp.is-full .cvh h2{font-size:1.7rem}.cvp.is-full .stats{grid-template-columns:repeat(2,minmax(0,1fr))}.cvp.is-full .tli{grid-template-columns:1fr;gap:2px}}
+@media (prefers-reduced-motion:reduce){.cvp,.cvb,.cv-links .spine{transition:none}}
+</style>
 </head>
 <body>
 <header class="site-header">
@@ -161,7 +227,14 @@
         <p class="eyebrow">Our Founder</p>
         <p class="name" style="margin-top:22px">Dr. Merve<br><span class="green">Selçuk</span></p>
         <p class="role">Founder, MATE Education</p>
-        <div class="spines" aria-hidden="true"><span>Language Assessment</span><span>Testing in Practice</span><span>Assessment Systems</span></div>
+        <div class="spines cv-links">
+          <button type="button" class="spine" id="cvTrigger" aria-haspopup="dialog" aria-expanded="false" aria-controls="cvPanel">View CV<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg></button>
+          <a class="spine" href="https://scholar.google.com/citations?hl=en&amp;user=nHlLwKMAAAAJ" target="_blank" rel="noopener">Publications<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>
+          <a class="spine" href="https://www.linkedin.com/in/merve-selcuk-phd-b6b85139/" target="_blank" rel="noopener">LinkedIn<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>
+        </div>
+        <div class="cv-actions">
+          <a class="btn btn-ghost" href="merve-selcuk-cv.pdf" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg> Download PDF</a>
+        </div>
       </div>
     </div>
   </section>
@@ -170,6 +243,191 @@
     <div class="wrap"><a class="next-page" href="review.html"><span><small>Next</small><strong>MATE Assessment System Review</strong></span></a></div>
   </section>
 </main>
+
+<div class="cvb" id="cvBackdrop" hidden></div>
+<aside class="cvp" id="cvPanel" role="dialog" aria-labelledby="cvTitle" aria-hidden="true" inert>
+  <div class="cvh">
+    <div>
+      <p class="eyebrow">Curriculum Vitae</p>
+      <h2 id="cvTitle">Dr. Merve Selçuk</h2>
+      <p class="cvsub">Assistant Professor &amp; Director, School of Foreign Languages, İstanbul Bilgi University · Founder, MATE Education</p>
+    </div>
+    <div class="cvtools">
+      <button type="button" class="ibtn" id="cvSize" aria-label="Expand to full view" title="Expand"><svg class="i-grow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg><svg class="i-shrink" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 14h6v6M20 10h-6V4M14 10l7-7M3 21l7-7"/></svg></button>
+      <a class="ibtn" href="merve-selcuk-cv.pdf" download aria-label="Download CV as PDF" title="Download PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg></a>
+      <button type="button" class="ibtn" id="cvClose" aria-label="Close CV" title="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+  </div>
+  <div class="cvbody">
+    <h3>Profile</h3>
+    <p>Language assessment specialist with three decades of experience in English language education across Turkish higher education. Her work focuses on test development and validation, institutional assessment systems and teacher assessment literacy. She contributes to the development and validation of national high-stakes exams in English as a foreign language and Turkish as a second/foreign language, serves on the advisory board of a national high-stakes English proficiency exam, and has trained testing office teams and directors from more than 50 universities.</p>
+    <div class="stats"><div class="stat"><b>30</b><span>years in language education</span></div><div class="stat"><b>50+</b><span>universities represented in her assessment trainings</span></div><div class="stat"><b>22</b><span>institutions advised on assessment</span></div><div class="stat"><b>12</b><span>assessment training and certificate courses in 8 countries</span></div><div class="stat"><b>10</b><span>publications, incl. a book on L2 assessment</span></div><div class="stat"><b>20+</b><span>conference papers in 8 countries</span></div></div>
+
+    <h3>Areas of Expertise</h3>
+    <div class="chips"><span class="chip">Language assessment</span><span class="chip">Test development &amp; item writing</span><span class="chip">Test validation</span><span class="chip">Standard setting</span><span class="chip">CEFR alignment</span><span class="chip">Rubric &amp; rating scale development</span><span class="chip">Learning-oriented assessment</span><span class="chip">Assessment literacy</span><span class="chip">Assessment quality assurance</span><span class="chip">Language programme leadership</span><span class="chip">Teacher education</span></div>
+
+    <h3>Professional Experience</h3>
+    <div class="tl">
+          <div class="tli"><p class="d">2025 – present</p><div><p class="t">Assistant Professor, Director<span class="now">Current</span></p><p class="o">İstanbul Bilgi University, School of Foreign Languages, İstanbul</p></div></div>
+          <div class="tli"><p class="d">2025 – present</p><div><p class="t">Guest Lecturer, Language Assessment<span class="now">Current</span></p><p class="o">Hacettepe University TÖMER, Teaching Turkish as a Foreign Language Certificate Programme, Ankara</p><p class="n">Periodically teaches the Language Assessment module of the certificate programme.</p></div></div>
+          <div class="tli"><p class="d">2023 – present</p><div><p class="t">Part-time Faculty Lecturer<span class="now">Current</span></p><p class="o">Yeditepe University, Faculty of Education, Department of English Language Teaching, İstanbul</p><p class="n">Teaches Language Assessment in the MA ELT programme.</p></div></div>
+          <div class="tli"><p class="d">2016 – 2025</p><div><p class="t">Director</p><p class="o">Altınbaş University, School of Foreign Languages, İstanbul</p></div></div>
+          <div class="tli"><p class="d">2021 – 2023</p><div><p class="t">Part-time Faculty Lecturer</p><p class="o">Bahçeşehir University, Faculty of Educational Sciences, Department of English Language Teaching, İstanbul</p><p class="n">Taught Language Assessment to senior students in the BA ELT programme.</p></div></div>
+          <div class="tli"><p class="d">2015 – 2016</p><div><p class="t">Advisor to the Rector</p><p class="o">Altınbaş University, School of Foreign Languages, İstanbul</p></div></div>
+          <div class="tli"><p class="d">2014 – 2015</p><div><p class="t">Academic Director</p><p class="o">Üsküdar University, Preparatory School, İstanbul</p></div></div>
+          <div class="tli"><p class="d">2012 – 2014</p><div><p class="t">Lecturer</p><p class="o">Yeditepe University, Faculty of Education, Department of English Language Teaching, İstanbul</p><p class="n">Taught ELT Methodology and Practicum, courses in the Pedagogical Formation Certificate Programme, and EFL courses for ELT students.</p></div></div>
+          <div class="tli"><p class="d">2001 – 2011</p><div><p class="t">EFL Instructor, Assistant Coordinator, Item Writer</p><p class="o">Yeditepe University, Preparatory School, İstanbul</p></div></div>
+          <div class="tli"><p class="d">1996 – 2001</p><div><p class="t">EFL Instructor, Testing Office Coordinator</p><p class="o">Yıldız Technical University, İstanbul</p></div></div>
+        </div>
+
+    <h3>Education</h3>
+    <div class="tl">
+          <div class="tli"><p class="d">2011 – 2020</p><div><p class="t">PhD, English Language Teaching</p><p class="o">Yeditepe University, İstanbul</p></div></div>
+          <div class="tli"><p class="d">1998 – 2001</p><div><p class="t">MA, English Language Teaching</p><p class="o">İstanbul University, İstanbul</p></div></div>
+          <div class="tli"><p class="d">1990 – 1995</p><div><p class="t">BA, Foreign Language Education</p><p class="o">Middle East Technical University (METU), Ankara</p></div></div>
+        </div>
+
+    <h3>Projects, Boards &amp; Grants</h3>
+    <div class="card">
+      <p class="muted sm">January 2025 – present</p>
+      <p class="t">High-Stakes National EFL Exam Development Project</p>
+      <p class="muted">Ministry of National Education (MoNE) &amp; Council of Europe · Consultant and Teacher Trainer</p>
+      <ul>
+        <li>Development of four-skill EFL tests at A1, A2 and B1 levels for K–12 students</li>
+        <li>Development of a B2+ EFL test for MoNE English teachers</li>
+        <li>Design and development of a 40-session language assessment training programme for MoNE teachers</li>
+      </ul>
+    </div>
+    <div class="card">
+      <p class="muted sm">February 2023 – present</p>
+      <p class="t">Four-Skill English Proficiency Assessment: Validation and Recognition</p>
+      <p class="muted">High-stakes national exam development project in English as a foreign language and Turkish as a second/foreign language · Project Member and Advisory Board Member</p>
+    </div>
+    <div class="two">
+      <div>
+        <p class="t">Boards</p>
+        <ul>
+          <li>National high-stakes English proficiency exam — Advisory Board</li>
+          <li>Uluslararası Sosyal Bilimler ve Eğitim Dergisi [International Journal of Social Sciences and Education] — Editorial and Advisory Board</li>
+        </ul>
+      </div>
+      <div>
+        <p class="t">Research Grants</p>
+        <ul>
+          <li>2022 — Uludağ University Scientific Research Project grant</li>
+          <li>2022 — Altınbaş University Scientific Research Project grant</li>
+          <li>2016 — ETS Research Project grant, ETS, Princeton, USA</li>
+          <li>2016 — Pearson PTE Academic Research Project grant, Pearson, Europe</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Publications</h3>
+    <ol class="plist">
+          <li><span class="num">01</span><span>Selçuk, M. (2025). Exploring the validity of a CEFR-aligned placement test through norm-referenced and criterion-referenced approaches. Edu 7: Yeditepe Üniversitesi Eğitim Fakültesi Dergisi, 15(17), 48–70.</span></li>
+          <li><span class="num">02</span><span>Uçar, T., Yoldaş, &amp; Selçuk, M. (2025). İkinci/yabancı dil olarak Türkçe B2 düzeyi yeterlilik sınavı için metin seçim süreci [Text selection for a B2-level proficiency exam in Turkish as a second/foreign language]. HİKMET Akademik Edebiyat Dergisi.</span></li>
+          <li><span class="num">03</span><span>Selçuk, M., &amp; İnceler, K. (2024). İkinci dil olarak Türkçenin öğretiminde geçerli ve güvenilir bir dereceli yazma puanlama ölçeği geliştirme [Developing a valid and reliable analytic writing rubric for teaching Turkish as a second language]. In Türkçe ve Dil Eğitiminde İyi Uygulamalar Konferansı Bildiri Kitabı – 2, Ankara, 22–24 May 2024.</span></li>
+          <li><span class="num">04</span><span>Selçuk, M., &amp; Uçar, T. (2023). İkinci / yabancı dil öğretiminde ölçme ve değerlendirme [Measurement and assessment in second/foreign language teaching]. İstanbul: Altınbaş Üniversitesi Yayınları.</span></li>
+          <li><span class="num">05</span><span>Selçuk, M. (2023). [Review of the book Technology-assisted language assessment in diverse contexts: Lessons from the transition to online testing during COVID-19, by K. Sadeghi]. Iranian Journal of Language Teaching Research, 11(2), 171–174.</span></li>
+          <li><span class="num">06</span><span>Pourbahram, R., Sadeghi, K., &amp; Selçuk, M. (2023). Student perceptions of assessment practices: Insights from test-taking narratives. Journal of Studies in Language Learning and Teaching, 1(1), 19–33.</span></li>
+          <li><span class="num">07</span><span>Farhady, H., &amp; Selçuk, M. (2022). Classroom-based diagnostic assessment practices of EFL instructors. Iranian Journal of Language Teaching Research, 10(2), 77–94.</span></li>
+          <li><span class="num">08</span><span>Selçuk, M., &amp; Yöntem, G. E. (2019). Beyond practicum: Interplay between prospective EFL teachers’ conceptualizations of field experience and teaching career. Advances in Language and Literary Studies, 10(1), 154–162.</span></li>
+          <li><span class="num">09</span><span>Çolakoğlu, Ö., &amp; Selçuk, M. (2019). Assessing individual and group oral exams: Scoring criteria and rater interaction. Advances in Language and Literary Studies, 10(1), 147–153.</span></li>
+          <li><span class="num">10</span><span>Karakaya, B., Mede, E., &amp; Selçuk, M. (2017). Students’ accuracy and perceptions about self-assessment in English speaking classrooms. INESJOURNAL, 4(12), 265–280.</span></li>
+    </ol>
+
+    <h3>Conference Presentations</h3>
+    <div class="tl">
+          <div class="tli"><p class="d">June 2026</p><div><p class="t">Cognitive Diagnostic Modelling (CDM) for construct validity evidence in the reading comprehension tasks of a national high-stakes English proficiency test: A mixed-methods approach to test validation — Phase II</p><p class="o">LTRC (ILTA Language Testing Research Colloquium), Montréal, Canada</p><p class="n muted">F. C. Yılmaz, S. Alaca, M. Selçuk &amp; Z. Ürkün</p></div></div>
+          <div class="tli"><p class="d">June 2025</p><div><p class="t">Cognitive Diagnostic Modelling (CDM) and construct validity evidence for reading comprehension tasks in a national high-stakes English proficiency test: A mixed-methods approach to test validation</p><p class="o">EALTA Conference, Pädagogische Hochschule Salzburg Stefan Zweig, Salzburg, Austria</p><p class="n muted">M. Selçuk, S. Alaca, S. Gürel, F. C. Yılmaz, M. Çimrin &amp; Z. Ürkün</p></div></div>
+          <div class="tli"><p class="d">October 2024</p><div><p class="t">Okuma becerileri: Bilişsel düzeye uygun soru yazımında etkili stratejiler [Reading skills: Effective strategies for writing items at the appropriate cognitive level] — workshop</p><p class="o">International Symposium on Measurement, Selection and Placement, Ankara, Türkiye</p><p class="n muted">M. Selçuk</p></div></div>
+          <div class="tli"><p class="d">June 2024</p><div><p class="t">Teachers’ perceptions of academic dishonesty in e-assessment</p><p class="o">EALTA Conference, Stranmillis University College, Queen’s University Belfast, UK</p><p class="n muted">M. Selçuk, K. Jalilzadeh &amp; M. Rashtchi</p></div></div>
+          <div class="tli"><p class="d">May 2024</p><div><p class="t">İkinci dil olarak Türkçenin öğretiminde geçerli ve güvenilir bir dereceli yazma puanlama ölçeği geliştirme [Developing a valid and reliable analytic writing rubric for teaching Turkish as a second language]</p><p class="o">Türkçe ve Dil Eğitiminde İyi Uygulamalar Konferansı, Ankara, Türkiye</p><p class="n muted">M. Selçuk &amp; K. İnceler</p></div></div>
+          <div class="tli"><p class="d">November 2023</p><div><p class="t">Performance Assessment and Supervising System</p><p class="o">QAAFL Conference, İzmir, Türkiye</p><p class="n muted">M. Selçuk, T. Turunç &amp; B. Apaydın Eyiakkan</p></div></div>
+          <div class="tli"><p class="d">September 2023</p><div><p class="t">A multi-faceted approach for collaboratively developing a writing rubric at tertiary level</p><p class="o">Best Practices in ELT Conference, İstanbul, Türkiye</p><p class="n muted">M. Selçuk, F. Şermet Öğüt &amp; Ö. Yalçınkaya</p></div></div>
+          <div class="tli"><p class="d">June 2023</p><div><p class="t">Learning-oriented assessment approach in a pre-service teacher education course</p><p class="o">EALTA Conference, Helsinki, Finland</p><p class="n muted">M. Selçuk</p></div></div>
+          <div class="tli"><p class="d">June 2022</p><div><p class="t">Reading comprehension tests: Equivalence of web-based and paper-based versions</p><p class="o">EJER Conference, İzmir, Türkiye</p><p class="n muted">M. Selçuk &amp; T. Uçar</p></div></div>
+          <div class="tli"><p class="d">May 2021</p><div><p class="t">Probing EFL learners’ perceptions and expectations regarding the quality of classroom assessment</p><p class="o">EALTA SIG Conference, online</p><p class="n muted">M. Alavi, K. Jalilzadeh &amp; M. Selçuk</p></div></div>
+          <div class="tli"><p class="d">May 2021</p><div><p class="t">Assessment literacy: Theoretical utopia or classroom reality?</p><p class="o">Jusup Balasagyn Kyrgyz National University &amp; Ankara Hacı Bayram Veli University Conference, online</p><p class="n muted">M. Alavi, K. Jalilzadeh &amp; M. Selçuk</p></div></div>
+          <div class="tli"><p class="d">September 2019</p><div><p class="t">Performance Assessment and Supervising System (PASS)</p><p class="o">Boğaziçi University THE Conference, İstanbul, Türkiye</p><p class="n muted">T. Turunç, M. Selçuk &amp; B. Apaydın Eyiakkan</p></div></div>
+          <div class="tli"><p class="d">June 2019</p><div><p class="t">Performance Assessment and Supervising System at Altınbaş University School of Foreign Languages</p><p class="o">FLE Joint Conference, İstanbul, Türkiye</p><p class="n muted">T. Turunç, M. Selçuk &amp; B. Apaydın Eyiakkan</p></div></div>
+          <div class="tli"><p class="d">April 2019</p><div><p class="t">Exploring EFL learners’ perceptions and expectations about classroom assessment quality</p><p class="o">International Language Teaching Research Group, online</p><p class="n muted">S. M. Alavi, M. Selçuk &amp; K. Jalilzadeh</p></div></div>
+          <div class="tli"><p class="d">July 2018</p><div><p class="t">Considerations for assessment in the multicultural tertiary EFL context: The case of Arab EFL students</p><p class="o">LTRC (ILTA Language Testing Research Colloquium), University of Auckland, New Zealand</p><p class="n muted">Ö. Yalçınkaya &amp; M. Selçuk</p></div></div>
+          <div class="tli"><p class="d">May 2018</p><div><p class="t">Placement tests: Are we making valid inferences?</p><p class="o">Çanakkale University ELT Research Conference, Antalya, Türkiye</p><p class="n muted">M. Selçuk</p></div></div>
+          <div class="tli"><p class="d">May 2017</p><div><p class="t">GlobELT Conference, Antalya, Türkiye</p><p class="n muted">B. Karakaya &amp; M. Selçuk</p></div></div>
+          <div class="tli"><p class="d">June 2016</p><div><p class="t">Variation in rater judgement assessing individual vs. group speaking tasks</p><p class="o">BUSELONF 2016, Ankara, Türkiye</p><p class="n muted">Ö. Yalçınkaya &amp; M. Selçuk</p></div></div>
+          <div class="tli"><p class="d">May 2016</p><div><p class="t">Classroom-based diagnostic assessment practices of EFL instructors</p><p class="o">EALTA SIG 2016, Valencia, Spain</p><p class="n muted">H. Farhady &amp; M. Selçuk</p></div></div>
+          <div class="tli"><p class="d">May 2016</p><div><p class="t">Expertise and pedagogical content knowledge</p><p class="o">International Conference, Sarajevo, Bosnia and Herzegovina</p><p class="n muted">M. Selçuk &amp; Ö. Yalçınkaya</p></div></div>
+          <div class="tli"><p class="d">April 2015</p><div><p class="t">Impact of practicum on entry into the teaching profession</p><p class="o">LIF 2015, Cappadocia, Türkiye</p><p class="n muted">M. Selçuk &amp; E. Genç</p></div></div>
+        </div>
+
+    <h3>Invited Talks, Trainings &amp; Workshops</h3>
+    <div class="tl">
+          <div class="tli"><p class="d">April 2026</p><div><p class="t">10-day language assessment training for MoNE teachers</p><p class="o">Ministry of National Education (MoNE) IPA Project, online</p></div></div>
+          <div class="tli"><p class="d">January 2026</p><div><p class="t">Writing rubric improvement in language assessment — workshop</p><p class="o">METASIG, TOBB University of Economics and Technology, Ankara</p></div></div>
+          <div class="tli"><p class="d">July 2025</p><div><p class="t">10-day language assessment training for MoNE teachers</p><p class="o">Ministry of National Education (MoNE) IPA Project, İzmir</p></div></div>
+          <div class="tli"><p class="d">May 2025</p><div><p class="t">Navigating the CPD landscape: Addressing challenges and charting effective pathways in SFL</p><p class="o">Harnessing Continuing Professional Development (CPD), Acıbadem University, İstanbul</p><p class="n muted">M. Selçuk &amp; T. Turunç</p></div></div>
+          <div class="tli"><p class="d">May 2025</p><div><p class="t">A national high-stakes electronic test of English proficiency</p><p class="o">17th Meeting of the Directors of Schools of Foreign Languages, Kocaeli</p><p class="n muted">M. Selçuk &amp; G. Fidan</p></div></div>
+          <div class="tli"><p class="d">2024 – 2025</p><div><p class="t">From theory to practice: The “how-to”, the “what” and the “why” of language assessment for your teaching context</p><p class="o">Roadshow trainings in İzmir, Ankara and İstanbul</p><p class="n muted">For testing office members and directors from more than 50 universities</p></div></div>
+          <div class="tli"><p class="d">June 2024</p><div><p class="t">Enhancing EFL quality assurance in higher education: Assessment systems and accreditation — workshop</p><p class="o">Quality Assurance, Accreditation and Standardization Conference (QUAAS), Çukurova University, Adana</p></div></div>
+          <div class="tli"><p class="d">May 2023</p><div><p class="t">Testing and assessment units — workshop</p><p class="o">Quality Assurance, Accreditation and Standardization Conference (QUAAS), Beykent University, İstanbul</p></div></div>
+          <div class="tli"><p class="d">June 2022</p><div><p class="t">Fundamentals of language assessment</p><p class="o">İTÜ SFL ELT Days, online</p></div></div>
+          <div class="tli"><p class="d">April 2022</p><div><p class="t">School of Foreign Languages 25th Anniversary Events, Beykent &amp; Doğuş University EMI, online</p></div></div>
+          <div class="tli"><p class="d">May 2018</p><div><p class="t">Managing language assessment</p><p class="o">Pearson Assured Conference, Cappadocia</p></div></div>
+          <div class="tli"><p class="d">September 2015</p><div><p class="t">Learning-oriented assessment — workshop</p><p class="o">İstanbul Technical University, İstanbul</p></div></div>
+        </div>
+    <div class="card" style="margin-top:18px">
+      <p class="muted sm">2023 – 2025</p>
+      <p class="t">Language assessment training and consultancy for institutions</p>
+      <div class="inst"><span>Boğaziçi University · İstanbul</span><span>Düzce University · Düzce</span><span>İstanbul Technical University · İstanbul</span><span>Recep Tayyip Erdoğan University · Rize</span><span>National Defence University, School of Foreign Languages (Kuleli Campus) · İstanbul</span><span>Antalya Bilim University · Antalya</span><span>National Defence University, School of Foreign Languages (Maltepe Campus) · İstanbul</span><span>Yalova University · Yalova</span><span>Gendarmerie and Coast Guard Academy · Ankara</span><span>Gedik University · İstanbul</span><span>Çukurova University · Adana</span><span>Doğuş University · İstanbul</span><span>Necmettin Erbakan University · Konya</span><span>Okan University · İstanbul</span><span>Ufuk University · Ankara</span><span>Üsküdar University · İstanbul</span><span>Medipol University · İstanbul</span><span>Topkapı University · İstanbul</span><span>Çağ University · Mersin</span><span>Kent University · İstanbul</span><span>Kültür University · İstanbul</span><span>Nişantaşı University · İstanbul</span></div>
+    </div>
+    <div class="card">
+      <p class="t">Visiting Lecturer — Erasmus+ Mobility</p>
+      <ul>
+        <li>November 2022 · University of Žilina, Slovakia — Two days of lectures on Web 2.0 tools in language learning.</li>
+        <li>April 2014 · Groupe T, Leuven, Belgium — Five days of postgraduate lectures on teacher education in culturally diverse societies, covering introduction to assessment, language assessment in multicultural societies, classroom management and cultural diversity, and bilingualism.</li>
+      </ul>
+    </div>
+
+    <h3>Professional Development</h3>
+    <div class="tl">
+          <div class="tli"><p class="d">June 2025</p><div><p class="t">Corpus Linguistics in Language Assessment</p><p class="o">1-week workshop · Lancaster University, UK</p></div></div>
+          <div class="tli"><p class="d">Oct 2024</p><div><p class="t">Learning-Oriented Assessment, with James Purpura</p><p class="o">3-day workshop · Ankara, Türkiye</p></div></div>
+          <div class="tli"><p class="d">July 2024</p><div><p class="t">Coding Qualitative Verbal Protocol Data for Test Validation, with Andrea Révész</p><p class="o">ILTA · 1-day workshop · University of Innsbruck, Austria</p></div></div>
+          <div class="tli"><p class="d">June 2024</p><div><p class="t">Standard Setting Validation</p><p class="o">EALTA · 3-day workshop · Stranmillis University College, Queen’s University Belfast, UK</p></div></div>
+          <div class="tli"><p class="d">Nov 2023</p><div><p class="t">Rasch Analysis</p><p class="o">ALTE · Half-day course · Società Dante Alighieri, Rome, Italy</p></div></div>
+          <div class="tli"><p class="d">Nov 2023</p><div><p class="t">The CEFR</p><p class="o">ALTE · 1-day workshop · Società Dante Alighieri, Rome, Italy</p></div></div>
+          <div class="tli"><p class="d">June 2023</p><div><p class="t">EBB Scale Development</p><p class="o">EALTA · 3-day workshop · University of Helsinki, Finland</p></div></div>
+          <div class="tli"><p class="d">Nov 2022</p><div><p class="t">Test Design for Languages for Specific Purposes</p><p class="o">ALTE · 1-day course · Charles University, Prague, Czech Republic</p></div></div>
+          <div class="tli"><p class="d">June 2022</p><div><p class="t">Formative Assessment in Language Teaching</p><p class="o">LLRC · 1-day workshops · Leiden University, Netherlands</p></div></div>
+          <div class="tli"><p class="d">July 2018</p><div><p class="t">Learning-Oriented Assessment</p><p class="o">ILTA · 2-day workshop · University of Auckland, New Zealand</p></div></div>
+          <div class="tli"><p class="d">Aug 2017</p><div><p class="t">Item Response Theory Certificate Programme</p><p class="o">25-hour programme · Lancaster University, UK</p></div></div>
+          <div class="tli"><p class="d">July 2016</p><div><p class="t">EALTA Summer School: Assessing Productive Skills</p><p class="o">35-hour programme · University of Innsbruck, Austria</p></div></div>
+        </div>
+
+    <h3>Academic Service &amp; Supervision</h3>
+    <div class="two">
+      <div>
+        <p class="t">Conference Organisation</p>
+        <ul>
+          <li>ICES 2026 — Scientific Committee Member</li>
+          <li>Best Practices in ELT, September 2023 — Head of Organising Committee, Altınbaş University, İstanbul. Plenary speakers: Rod Ellis, Constant Leung, Magdalena Kubanyiova.</li>
+        </ul>
+      </div>
+      <div>
+        <p class="t">Theses &amp; Dissertations Supervised</p>
+        <ul>
+          <li>2026 · PhD, Uludağ University — İkinci/yabancı dil olarak Türkçenin B2 düzeyi yapı geçerlemesi [Construct validation of B2-level Turkish as a second/foreign language], Tarık Uçar</li>
+          <li>2025 · Thesis — Standard setting of a national high-stakes English proficiency test, Mustafa Çimrin</li>
+          <li>2024 · MA, Yeditepe University — The effect of mind mapping on EFL learners' writing performance and perceptions in descriptive and persuasive essays, Zeynep Bakırezen</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="cvfoot">For collaboration, consultancy or speaking invitations: <a href="mailto:info@mateducation.com">info@mateducation.com</a> · <a href="contact.html">mateducation.com/contact</a><br>Curriculum Vitae, updated 2026</p>
+  </div>
+</aside>
+
 
 <footer class="site-footer">
   <div class="wrap foot-grid">
@@ -243,6 +501,44 @@
       if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1600)},sel);}else sel();
     });
   });
+})();
+</script>
+<script>
+(function(){
+  var trig=document.getElementById('cvTrigger'), panel=document.getElementById('cvPanel');
+  if(!trig||!panel) return;
+  var back=document.getElementById('cvBackdrop'), size=document.getElementById('cvSize'), close=document.getElementById('cvClose');
+  var mode='closed', t=null, hoverOK=window.matchMedia('(hover: hover) and (pointer: fine)');
+  function set(m){
+    clearTimeout(t);
+    if(m===mode) return;
+    var wasFull=mode==='full';
+    mode=m;
+    panel.classList.toggle('is-peek',m==='peek');
+    panel.classList.toggle('is-full',m==='full');
+    trig.classList.toggle('is-on',m!=='closed');
+    trig.setAttribute('aria-expanded',m==='closed'?'false':'true');
+    panel.setAttribute('aria-hidden',m==='closed'?'true':'false');
+    if(m==='closed') panel.setAttribute('inert',''); else panel.removeAttribute('inert');
+    if(m==='full'){ panel.setAttribute('aria-modal','true'); } else { panel.removeAttribute('aria-modal'); }
+    size.setAttribute('aria-label',m==='full'?'Shrink to side panel':'Expand to full view');
+    size.title=m==='full'?'Shrink':'Expand';
+    document.documentElement.classList.toggle('cv-lock',m==='full');
+    if(m==='full'){ back.hidden=false; requestAnimationFrame(function(){back.classList.add('is-full');}); close.focus({preventScroll:true}); }
+    else { back.classList.remove('is-full'); setTimeout(function(){ if(mode!=='full') back.hidden=true; },400); }
+    if(wasFull && m==='closed') trig.focus({preventScroll:true});
+  }
+  function later(m,ms){ clearTimeout(t); t=setTimeout(function(){set(m);},ms); }
+  function leave(){ if(mode==='full') return; clearTimeout(t); if(mode==='peek') later('closed',380); }
+  trig.addEventListener('mouseenter',function(){ if(!hoverOK.matches||mode==='full') return; if(mode==='peek') clearTimeout(t); else later('peek',140); });
+  trig.addEventListener('mouseleave',leave);
+  panel.addEventListener('mouseenter',function(){ if(mode==='peek') clearTimeout(t); });
+  panel.addEventListener('mouseleave',leave);
+  trig.addEventListener('click',function(){ set('full'); });
+  size.addEventListener('click',function(){ set(mode==='full'?(hoverOK.matches?'peek':'closed'):'full'); });
+  close.addEventListener('click',function(){ set('closed'); });
+  back.addEventListener('click',function(){ set('closed'); });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&mode!=='closed') set('closed'); });
 })();
 </script>
 </body>
